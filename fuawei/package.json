@@ -4,7 +4,7 @@
   "description": "extention for lab3 for ISRPO",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.144.0"
+    "vscode": "^1.139.0"
   },
   "categories": [
     "Other"
@@ -15,9 +15,20 @@
     "commands": [
       {
         "command": "fuawei.helloWorld",
-        "title": "Hello World"
+        "title": "Hello World",
+        "category": "FUAWEI",
+        "icon": "$(smiley)"
       }
-    ]
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "fuawei.helloWorld",
+          "group": "navigation",
+          "when": "editorTextFocus"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
