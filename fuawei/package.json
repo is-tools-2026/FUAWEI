@@ -18,7 +18,11 @@
         "title": "Hello World",
         "category": "FUAWEI",
         "icon": "$(smiley)"
-      }
+      },
+      {
+        "command": "miextension.compile",
+      "title": "Compiler"
+    }
     ],
     "menus": {
       "editor/title": [
