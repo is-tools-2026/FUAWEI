@@ -31,7 +31,14 @@
           "group": "navigation",
           "when": "editorTextFocus"
         }
-      ]
+      ],
+        "explorer/context":[
+          {
+            "command":"miextension.compile",
+            "when": "resourceExtname == .c"
+          }
+        ]
+      
     }
   },
   "scripts": {
