@@ -37,7 +37,7 @@
 ---
 
 ## 🚀 Инструкция по запуску
-1. Склонировать репозиторий: `git clone https://github.com`
+1. Склонировать репозиторий: `git clone https://github.com/is-tools-2026/FUAWEI.git`
 2. Открыть проект в IDE (IntelliJ IDEA / PyCharm / VS Code).
 3. Дождаться индексации и сборки проекта Gradle/NPM.
 4. Запустить плагин через конфигурацию `Run IDE` или `Extension`.
