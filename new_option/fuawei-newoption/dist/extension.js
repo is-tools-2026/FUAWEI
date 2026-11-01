@@ -35,17 +35,27 @@ __export(extension_exports, {
 });
 module.exports = __toCommonJS(extension_exports);
 var import_child_process = require("child_process");
+var path = __toESM(require("path"));
 var vscode = __toESM(require("vscode"));
 function activate(context) {
-  const comando = vscode.commands.registerCommand("miextension.compile", (uri) => {
-    (0, import_child_process.exec)(`clang "${uri.fsPath}"`, (error, stdout, stderr) => {
-      if (error) {
-        vscode.window.showErrorMessage(stderr || error.message);
-        return;
-      }
-      vscode.window.showInformationMessage("Successfully compilation");
-    });
-  });
+  const comando = vscode.commands.registerCommand(
+    "miextension.compile",
+    (uri) => {
+      const dir = path.dirname(uri.fsPath);
+      const salida = path.join(dir, "a.exe");
+      (0, import_child_process.exec)(
+        `clang "${uri.fsPath}" -o "${salida}"`,
+        { cwd: dir },
+        (error, stdout, stderr) => {
+          if (error) {
+            vscode.window.showErrorMessage(stderr || error.message);
+            return;
+          }
+          vscode.window.showInformationMessage(`Creado: ${salida}`);
+        }
+      );
+    }
+  );
   context.subscriptions.push(comando);
 }
 function deactivate() {
