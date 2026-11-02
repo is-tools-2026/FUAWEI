@@ -34,7 +34,7 @@ __export(extension_exports, {
   deactivate: () => deactivate
 });
 module.exports = __toCommonJS(extension_exports);
-var vscode3 = __toESM(require("vscode"));
+var vscode4 = __toESM(require("vscode"));
 
 // src/compile.ts
 var import_child_process = require("child_process");
@@ -62,15 +62,112 @@ function Compile(context) {
   context.subscriptions.push(comando);
 }
 
-// src/time.ts
+// src/counter.ts
 var vscode2 = __toESM(require("vscode"));
+function LineCount(context) {
+  const cmd = vscode2.commands.registerCommand("fuawei.countLines", () => {
+    const editor = vscode2.window.activeTextEditor;
+    if (!editor) {
+      vscode2.window.showErrorMessage("No file is open");
+      return;
+    }
+    let empty = 0;
+    let comments = 0;
+    let code = 0;
+    const lines = editor.document.getText().split("\n");
+    for (const line of lines) {
+      const t = line.trim();
+      if (t === "") {
+        empty++;
+      } else if (t.startsWith("//") || t.startsWith("#")) {
+        comments++;
+      } else {
+        code++;
+      }
+    }
+    const panel = vscode2.window.createWebviewPanel(
+      "lineStats",
+      "Line Statistics",
+      vscode2.ViewColumn.Beside,
+      {}
+    );
+    panel.webview.html = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #1e1e1e;
+                        color: white;
+                        padding: 20px;
+                    }
+
+                    h2 {
+                        text-align: center;
+                        color: #4fc3f7;
+                    }
+
+                    .card {
+                        padding: 12px;
+                        margin: 10px 0;
+                        border-radius: 8px;
+                        font-size: 18px;
+                        font-weight: bold;
+                    }
+
+                    .code {
+                        background-color: #2e7d32;
+                    }
+
+                    .comment {
+                        background-color: #ef6c00;
+                    }
+
+                    .empty {
+                        background-color: #616161;
+                    }
+
+                    .total {
+                        background-color: #1565c0;
+                    }
+                </style>
+            </head>
+
+            <body>
+                <h2>\u{1F4CA} Line Statistics</h2>
+
+                <div class="card code">
+                    \u{1F4BB} Code lines: ${code}
+                </div>
+
+                <div class="card comment">
+                    \u{1F4AC} Comment lines: ${comments}
+                </div>
+
+                <div class="card empty">
+                    \u{1F4C4} Empty lines: ${empty}
+                </div>
+
+                <div class="card total">
+                    \u{1F4C8} Total: ${code + comments + empty}
+                </div>
+            </body>
+            </html>
+            `;
+  });
+  context.subscriptions.push(cmd);
+}
+
+// src/time.ts
+var vscode3 = __toESM(require("vscode"));
 function Timer(context) {
   const today = () => (/* @__PURE__ */ new Date()).toDateString();
   let seconds = 0;
   if (context.globalState.get("timerDate") === today()) {
     seconds = context.globalState.get("timerSeconds", 0);
   }
-  const item = vscode2.window.createStatusBarItem(vscode2.StatusBarAlignment.Left, 100);
+  const item = vscode3.window.createStatusBarItem(vscode3.StatusBarAlignment.Left, 100);
   item.command = "fuawei.resetTimer";
   item.tooltip = "Coding time today (click to reset)";
   const format = (s) => {
@@ -86,7 +183,7 @@ function Timer(context) {
     context.globalState.update("timerDate", today());
     context.globalState.update("timerSeconds", seconds);
   };
-  const reset = vscode2.commands.registerCommand("fuawei.resetTimer", () => {
+  const reset = vscode3.commands.registerCommand("fuawei.resetTimer", () => {
     seconds = 0;
     save();
     render();
@@ -110,9 +207,10 @@ function Timer(context) {
 function activate(context) {
   Compile(context);
   Timer(context);
+  LineCount(context);
   console.log('Congratulations, your extension "fuawei" is now active!');
-  const disposable = vscode3.commands.registerCommand("fuawei.helloWorld", () => {
-    vscode3.window.showInformationMessage("Hello World from FUAWEI!");
+  const disposable = vscode4.commands.registerCommand("fuawei.helloWorld", () => {
+    vscode4.window.showInformationMessage("Hello World from FUAWEI!");
   });
   context.subscriptions.push(disposable);
 }
