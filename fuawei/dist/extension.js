@@ -34,11 +34,40 @@ __export(extension_exports, {
   deactivate: () => deactivate
 });
 module.exports = __toCommonJS(extension_exports);
+var vscode2 = __toESM(require("vscode"));
+
+// src/compile.ts
+var import_child_process = require("child_process");
+var path = __toESM(require("path"));
 var vscode = __toESM(require("vscode"));
+function Compile(context) {
+  const comando = vscode.commands.registerCommand(
+    "miextension.compile",
+    (uri) => {
+      const dir = path.dirname(uri.fsPath);
+      const salida = path.join(dir, "a.exe");
+      (0, import_child_process.exec)(
+        `clang "${uri.fsPath}" -o "${salida}"`,
+        { cwd: dir },
+        (error, stdout, stderr) => {
+          if (error) {
+            vscode.window.showErrorMessage(stderr || error.message);
+            return;
+          }
+          vscode.window.showInformationMessage(`Creado: ${salida}`);
+        }
+      );
+    }
+  );
+  context.subscriptions.push(comando);
+}
+
+// src/extension.ts
 function activate(context) {
+  Compile(context);
   console.log('Congratulations, your extension "fuawei" is now active!');
-  const disposable = vscode.commands.registerCommand("fuawei.helloWorld", () => {
-    vscode.window.showInformationMessage("Hello World from FUAWEI!");
+  const disposable = vscode2.commands.registerCommand("fuawei.helloWorld", () => {
+    vscode2.window.showInformationMessage("Hello World from FUAWEI!");
   });
   context.subscriptions.push(disposable);
 }
