@@ -22,6 +22,10 @@
       {
         "command": "miextension.compile",
       "title": "Compiler"
+    },
+    {
+      "command":"fuawei.resetTimer",
+      "title":"Reset Time"
     }
     ],
     "menus": {
