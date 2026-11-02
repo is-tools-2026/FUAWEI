@@ -11,7 +11,7 @@ export function Timer(context: vscode.ExtensionContext) {
   const item =
       vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
   item.command = 'fuawei.resetTimer';
-  item.tooltip = 'Tiempo de programación hoy (clic para reiniciar)';
+  item.tooltip = 'Coding time today (click to reset)';
 
   const format = (s: number) => {
     const h = String(Math.floor(s / 3600)).padStart(2, '0');
