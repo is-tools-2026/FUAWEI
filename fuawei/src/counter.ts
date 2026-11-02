@@ -13,6 +13,7 @@ export function LineCount(context: vscode.ExtensionContext) {
     let comments = 0;
     let code = 0;
 
+    const language = editor.document.languageId;
     const lines = editor.document.getText().split('\n');
 
     for (const line of lines) {
@@ -20,12 +21,15 @@ export function LineCount(context: vscode.ExtensionContext) {
 
       if (t === '') {
         empty++;
-      } else if (t.startsWith('//') || t.startsWith('#')) {
+      } else if (
+          t.startsWith('//') || (language === 'python' && t.startsWith('#'))) {
         comments++;
       } else {
         code++;
       }
     }
+
+    const total = empty + comments + code;
 
     const panel = vscode.window.createWebviewPanel(
         'lineStats', 'Line Statistics', vscode.ViewColumn.Beside, {});
@@ -48,10 +52,10 @@ export function LineCount(context: vscode.ExtensionContext) {
                     }
 
                     .card {
-                        padding: 12px;
-                        margin: 10px 0;
-                        border-radius: 8px;
-                        font-size: 18px;
+                        padding: 15px;
+                        margin: 12px 0;
+                        border-radius: 10px;
+                        font-size: 20px;
                         font-weight: bold;
                     }
 
@@ -74,6 +78,7 @@ export function LineCount(context: vscode.ExtensionContext) {
             </head>
 
             <body>
+
                 <h2>📊 Line Statistics</h2>
 
                 <div class="card code">
@@ -89,8 +94,9 @@ export function LineCount(context: vscode.ExtensionContext) {
                 </div>
 
                 <div class="card total">
-                    📈 Total: ${code + comments + empty}
+                    📈 Total lines: ${total}
                 </div>
+
             </body>
             </html>
             `;
