@@ -34,7 +34,7 @@ __export(extension_exports, {
   deactivate: () => deactivate
 });
 module.exports = __toCommonJS(extension_exports);
-var vscode2 = __toESM(require("vscode"));
+var vscode3 = __toESM(require("vscode"));
 
 // src/compile.ts
 var import_child_process = require("child_process");
@@ -62,12 +62,57 @@ function Compile(context) {
   context.subscriptions.push(comando);
 }
 
+// src/time.ts
+var vscode2 = __toESM(require("vscode"));
+function Timer(context) {
+  const today = () => (/* @__PURE__ */ new Date()).toDateString();
+  let seconds = 0;
+  if (context.globalState.get("timerDate") === today()) {
+    seconds = context.globalState.get("timerSeconds", 0);
+  }
+  const item = vscode2.window.createStatusBarItem(vscode2.StatusBarAlignment.Left, 100);
+  item.command = "fuawei.resetTimer";
+  item.tooltip = "Tiempo de programaci\xF3n hoy (clic para reiniciar)";
+  const format = (s) => {
+    const h = String(Math.floor(s / 3600)).padStart(2, "0");
+    const m = String(Math.floor(s % 3600 / 60)).padStart(2, "0");
+    const sec = String(s % 60).padStart(2, "0");
+    return `${h}:${m}:${sec}`;
+  };
+  const render = () => {
+    item.text = `$(clock) ${format(seconds)}`;
+  };
+  const save = () => {
+    context.globalState.update("timerDate", today());
+    context.globalState.update("timerSeconds", seconds);
+  };
+  const reset = vscode2.commands.registerCommand("fuawei.resetTimer", () => {
+    seconds = 0;
+    save();
+    render();
+  });
+  render();
+  item.show();
+  const interval = setInterval(() => {
+    if (context.globalState.get("timerDate") !== today() && seconds > 0) {
+      seconds = 0;
+    }
+    seconds++;
+    save();
+    render();
+  }, 1e3);
+  context.subscriptions.push(item, reset, {
+    dispose: () => clearInterval(interval)
+  });
+}
+
 // src/extension.ts
 function activate(context) {
   Compile(context);
+  Timer(context);
   console.log('Congratulations, your extension "fuawei" is now active!');
-  const disposable = vscode2.commands.registerCommand("fuawei.helloWorld", () => {
-    vscode2.window.showInformationMessage("Hello World from FUAWEI!");
+  const disposable = vscode3.commands.registerCommand("fuawei.helloWorld", () => {
+    vscode3.window.showInformationMessage("Hello World from FUAWEI!");
   });
   context.subscriptions.push(disposable);
 }
