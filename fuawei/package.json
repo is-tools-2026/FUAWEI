@@ -30,6 +30,10 @@
     {
       "command":"fuawei.countLines",
       "title":"Count Lines"
+    },
+    {
+      "command": "fuawei.openGame",
+      "title": "FUAWEI: Змейка & Тетрис (Аркада)"
     }
     ],
     "menus": {

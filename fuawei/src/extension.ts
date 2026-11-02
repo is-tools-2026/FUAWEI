@@ -6,6 +6,8 @@ import {Compile} from './compile';
 import {LineCount} from './counter';
 import {Timer} from './time';
 
+import { openGamePanel } from './gamePanel';
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -20,14 +22,21 @@ export function activate(context: vscode.ExtensionContext) {
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  const disposable =
+  const helloWorldDisposable =
       vscode.commands.registerCommand('fuawei.helloWorld', () => {
         // The code you place here will be executed every time your command is
         // executed Display a message box to the user
         vscode.window.showInformationMessage('Hello World from FUAWEI!');
       });
 
-  context.subscriptions.push(disposable);
+  // Регистрация команды запуска игры (Змейка / Тетрис)
+  const gameDisposable = vscode.commands.registerCommand('fuawei.openGame', () => {
+        openGamePanel(context);
+    });
+
+  // Добавляем оба disposable в подписки расширения
+  context.subscriptions.push(helloWorldDisposable);
+  context.subscriptions.push(gameDisposable);
 }
 
 // This method is called when your extension is deactivated
