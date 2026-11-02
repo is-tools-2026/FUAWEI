@@ -26,6 +26,10 @@
     {
       "command":"fuawei.resetTimer",
       "title":"Reset Time"
+    },
+    {
+      "command":"fuawei.counlines",
+      "title":"Count Lines"
     }
     ],
     "menus": {
