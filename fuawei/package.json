@@ -28,7 +28,7 @@
       "title":"Reset Time"
     },
     {
-      "command":"fuawei.counlines",
+      "command":"fuawei.countLines",
       "title":"Count Lines"
     }
     ],
@@ -45,6 +45,12 @@
             "command":"miextension.compile",
             "when": "resourceExtname == .c"
           }
+        ],
+        "editor/context":[
+        {
+          "command":"fuawei.countLines"
+        }
+
         ]
       
     }
