@@ -13,4 +13,10 @@ export function Timer(context: vscode.ExtensionContext) {
   item.text = `$(clock ${format(seconds)})`;
   item.tooltip = 'Programation time';
   item.show();
+  const interval = setInterval(() => {
+    seconds++;
+    item.text = `$(clock) ${format(seconds)}`;
+  }, 1000);
+
+  context.subscriptions.push(item, {dispose: () => clearInterval(interval)});
 }
