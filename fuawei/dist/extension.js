@@ -72,7 +72,7 @@ function Timer(context) {
   }
   const item = vscode2.window.createStatusBarItem(vscode2.StatusBarAlignment.Left, 100);
   item.command = "fuawei.resetTimer";
-  item.tooltip = "Tiempo de programaci\xF3n hoy (clic para reiniciar)";
+  item.tooltip = "Coding time today (click to reset)";
   const format = (s) => {
     const h = String(Math.floor(s / 3600)).padStart(2, "0");
     const m = String(Math.floor(s % 3600 / 60)).padStart(2, "0");
